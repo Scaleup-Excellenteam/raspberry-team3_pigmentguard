@@ -1,7 +1,3 @@
-
-#ifndef PIGMENTGUARD_CONTROLLER_H
-#define PIGMENTGUARD_CONTROLLER_H
-
 #include <cstdlib>
 #include <iostream>
 #include <ctime>
@@ -10,6 +6,7 @@
 #include <string>
 #include <csignal>
 
+#include "ImageProcessing.h"
 
 class Controller {
 public:
@@ -19,9 +16,10 @@ public:
 
     void startTest();
 
+    [[noreturn]] void takePictures(const std::string& string, int, int);
+
 private:
     bool shouldRun = true;
 };
 
 
-#endif //PIGMENTGUARD_CONTROLLER_H

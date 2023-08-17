@@ -11,9 +11,14 @@ void Controller::startTest() {
     const int intervalSeconds = 5; // Capture interval in seconds
     const int videoDuration = 30;   // Video duration in seconds
 
-
     // Create the directory if it doesn't exist
     mkdir(saveDirectory.c_str(), 0777);
+
+    takePictures(saveDirectory, videoDuration, intervalSeconds);
+}
+
+
+[[noreturn]] void Controller::takePictures(const std::string& saveDirectory, const int videoDuration, const int intervalSeconds) {
 
     while (true) {
         // Generate a unique filename based on the current time
@@ -34,8 +39,7 @@ void Controller::startTest() {
         std::string framesDirectory = saveDirectory + "/frames_" + std::to_string(currentTime);
         mkdir(framesDirectory.c_str(), 0777);
 
-        std::string extractFramesCommand =
-                "ffmpeg -i " + videoFilename + " -vf fps=1 " + framesDirectory + "/frame_%d.jpg";
+        std::string extractFramesCommand = "ffmpeg -i " + videoFilename + " -vf fps=1 " + framesDirectory + "/frame_%d.jpg";
         result = std::system(extractFramesCommand.c_str());
 
         // Wait for the command to commit before capturing the next video
@@ -44,9 +48,8 @@ void Controller::startTest() {
         if (result != 0) {
             std::cerr << "Error extracting frames." << std::endl;
         }
-        break;  // for now do only once
+
+        ImageProcessing imgProc;
+        imgProc.processImages(framesDirectory);
     }
-
 }
-
-
